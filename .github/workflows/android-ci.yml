@@ -1,0 +1,73 @@
+# This is a basic workflow to help you get started with Android CI
+#
+# This workflow will:
+# 1. Trigger on pushes and pull requests to the 'main' branch.
+# 2. Set up a Java (JDK 17) environment AND cache Gradle.
+# 3. Run the linter.
+# 4. Run unit tests.
+# 5. Build a debug APK.
+# 6. Upload the debug APK as an artifact.
+
+name: Android CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events but only for the "main" branch
+  push:
+    branches: ["main"]
+
+  # Triggers the workflow on pull request events that target the "main" branch
+  pull_request:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checks out your repository's code so the job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Sets up the Java JDK v17 AND enables Gradle caching
+      # --- THIS IS THE NEW FIX ---
+      # We are using setup-java to handle both Java and Gradle caching,
+      # which avoids the 'gradle/setup-gradle' action that was failing.
+      - name: Set up JDK 17 and Gradle
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+          # Add this to cache Gradle dependencies
+          cache: "gradle"
+
+      # 3. Grant execute permission for gradlew
+      # This is necessary because file permissions are not always preserved in git
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 4. Run the linter (checks for code quality and style issues)
+      # 'lintDebug' runs the linter for the 'debug' build variant
+      - name: Run Lint
+        run: ./gradlew lintDebug
+
+      # 5. Run unit tests
+      # 'testDebugUnitTest' runs all local unit tests for the 'debug' build variant
+      - name: Run Tests
+        run: ./gradlew testDebugUnitTest
+
+      # 6. Build the debug APK
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      # 7. Upload the generated APK as a workflow artifact
+      # This allows you to download the APK file directly from the GitHub Actions run page
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk # The name of the artifact
+          path: app/build/outputs/apk/debug/app-debug.apk # The path to the file to upload
