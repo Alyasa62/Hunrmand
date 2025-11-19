@@ -57,4 +57,18 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("androidx.compose.material3:material3:1.4.0")
+    implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.5.0-alpha08")
+
+    val nav_version = "2.9.6"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("androidx.activity:activity-compose:1.11.0")
+
+    implementation("androidx.compose.material:material:1.9.4")
+
+    implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
+
 }
