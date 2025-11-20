@@ -15,7 +15,9 @@ import com.example.hunrmand.navigation.bottomNavItems
 import com.example.hunrmand.ui.components.AppBottomBar
 import com.example.hunrmand.ui.screens.booking.BookingScreen
 import com.example.hunrmand.ui.screens.HomeScreen
+import com.example.hunrmand.ui.screens.notification.NotificationScreen
 import com.example.hunrmand.ui.screens.ProfileScreen
+import com.example.hunrmand.ui.screens.SearchScreen
 
 @Composable
 fun MainScreen() {
@@ -47,7 +49,7 @@ fun MainScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Routes.HOME) {
-                HomeScreen()
+                HomeScreen(navController = navController)
             }
             composable(Routes.BOOKING) {
                 BookingScreen()
@@ -55,11 +57,15 @@ fun MainScreen() {
             composable(Routes.NEW_JOB) {
                 NewJobScreen()
             }
+            // --- Added the missing Notification Route ---
+            composable(Routes.NOTIFICATION) {
+                NotificationScreen()
+            }
             composable(Routes.PROFILE) {
                 ProfileScreen()
             }
-            composable(Routes.REWARDS) {
-                RewardsScreen()
+            composable(Routes.SEARCH) {
+                SearchScreen()
             }
         }
     }

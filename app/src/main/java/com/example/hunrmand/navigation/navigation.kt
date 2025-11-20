@@ -5,10 +5,12 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Stars
 import com.example.hunrmand.ui.components.NavItem
 
@@ -17,7 +19,8 @@ object Routes {
     const val BOOKING = "booking"
     const val NEW_JOB = "new_job"
     const val PROFILE = "profile"
-    const val REWARDS = "rewards"
+    const val NOTIFICATION = "notification"
+    const val SEARCH = "search"
 }
 
 val bottomNavItems = listOf(
@@ -44,11 +47,11 @@ val bottomNavItems = listOf(
         isMainAction = true
     ),
     NavItem(
-        route = Routes.REWARDS,
-        label = "Rewards",
-        selectedIcon = Icons.Filled.Stars,
-        unselectedIcon = Icons.Outlined.Stars,
-        contentDescription = "Rewards Screen"
+        route = Routes.NOTIFICATION,
+        label = "Notification",
+        selectedIcon = Icons.Filled.Notifications,
+        unselectedIcon = Icons.Outlined.Notifications,
+        contentDescription = "Notifications Screen"
     ),
     NavItem(
         route = Routes.PROFILE,

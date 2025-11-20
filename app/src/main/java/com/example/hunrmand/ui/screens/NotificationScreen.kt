@@ -1,4 +1,4 @@
-package com.example.hunrmand.ui.screens
+package com.example.hunrmand.ui.screens.notification
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,12 +8,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun RewardsScreen(modifier: Modifier = Modifier) {
+fun NotificationScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Home Screen")
-
+        Text(text = "Notifications")
     }
 }

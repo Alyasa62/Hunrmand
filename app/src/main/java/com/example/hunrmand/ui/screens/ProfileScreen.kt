@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun ProfileScreen() {
-    // You will replace this with your actual screen content
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
