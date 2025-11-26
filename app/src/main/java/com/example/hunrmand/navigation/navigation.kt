@@ -6,12 +6,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.Stars
 import com.example.hunrmand.ui.components.NavItem
 
 object Routes {
@@ -21,6 +19,14 @@ object Routes {
     const val PROFILE = "profile"
     const val NOTIFICATION = "notification"
     const val SEARCH = "search"
+
+    // Dynamic Routes
+    const val WORKER_LIST = "worker_list/{categoryId}"
+    const val WORKER_DETAIL = "worker_detail/{workerId}"
+
+    // Helper functions to build the route string
+    fun getWorkerListRoute(categoryId: String) = "worker_list/$categoryId"
+    fun getWorkerDetailRoute(workerId: String) = "worker_detail/$workerId"
 }
 
 val bottomNavItems = listOf(
