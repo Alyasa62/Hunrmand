@@ -15,4 +15,3 @@ Cloning the Project:
 * [Kotlin](https://kotlinlang.org/) - First-class and official programming language for Android development.
 * [Jetpack Compose](https://developer.android.com/jetpack/compose) - Android’s modern toolkit for building native UI.
 * [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) - A software design philosophy that separates the elements of a design into ring levels.
-* [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) - For dependency injection.
