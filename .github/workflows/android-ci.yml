@@ -70,4 +70,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Hunrmand # The name of the artifact
-          path: app/build/outputs/apk/debug/app-debug.apk # The path to the file to upload
+          path: app/build/outputs/apk/debug/Hunrmand.apk # The path to the file to upload
