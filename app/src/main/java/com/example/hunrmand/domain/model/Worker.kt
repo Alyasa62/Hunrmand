@@ -7,5 +7,6 @@ data class Worker(
     val rating: Double,
     val city: String,
     val hourlyRate: String,
-    val imageUrl: String? = null // Placeholder for real image URL
+    val imageUrl: String? = null, // Placeholder for real image URL
+    val isTopPick: Boolean = false
 )

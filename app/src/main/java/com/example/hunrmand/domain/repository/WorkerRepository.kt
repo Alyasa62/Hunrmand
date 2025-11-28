@@ -7,4 +7,7 @@ interface WorkerRepository {
     fun getCategories(): List<Category>
     fun getWorkersByCategory(categoryId: String): List<Worker>
     fun getWorkerById(workerId: String): Worker?
+
+    // New function for dynamic filtering
+    fun getTopRatedWorkers(): List<Worker>
 }
