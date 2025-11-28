@@ -31,9 +31,9 @@ fun CategoryItem(
     Surface(
         onClick = { onClick(category.id) },
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLow, // Soft background
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
         tonalElevation = 2.dp,
-        modifier = Modifier.aspectRatio(1f) // Keep it square
+        modifier = Modifier.aspectRatio(1f)
     ) {
         Column(
             modifier = Modifier

@@ -60,7 +60,7 @@ fun HomeScreen(
     val categories = repository.getCategories()
     val topWorkers = repository.getTopRatedWorkers()
 
-    val nameToDisplay = userName ?: "Adnan"
+    val nameToDisplay = userName ?: "User"
     val cityToDisplay = userCity ?: "City, ABC"
 
     val adsList = listOf(
@@ -77,12 +77,11 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background) // Use Theme Background
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
-            .statusBarsPadding() // Avoid overlapping status bar
+            .statusBarsPadding()
             .padding(16.dp)
     ) {
-        // --- 1. Header (Staggered Animation Index 0) ---
         AnimatedVisibility(
             visibleState = visibleState,
             enter = slideInVertically(animationSpec = tween(500)) { 50 } + fadeIn(animationSpec = tween(500))
@@ -115,13 +114,12 @@ fun HomeScreen(
                         )
                     }
                 }
-                // Optional Profile/Menu Icon could go here
             }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- 2. Search (Staggered Animation Index 1) ---
+        // --- 2. Search ---
         AnimatedVisibility(
             visibleState = visibleState,
             enter = slideInVertically(animationSpec = tween(500, delayMillis = 100)) { 50 } + fadeIn(animationSpec = tween(500, delayMillis = 100))
@@ -157,7 +155,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- 3. Ads Pager (Staggered Animation Index 2) ---
+        // --- 3. Ads Pager ---
         AnimatedVisibility(
             visibleState = visibleState,
             enter = slideInVertically(animationSpec = tween(500, delayMillis = 200)) { 50 } + fadeIn(animationSpec = tween(500, delayMillis = 200))
@@ -166,10 +164,9 @@ fun HomeScreen(
                 val pagerState = rememberPagerState(pageCount = { adsList.size })
                 HorizontalPager(
                     state = pagerState,
-                    contentPadding = PaddingValues(horizontal = 8.dp), // Peek effect
+                    contentPadding = PaddingValues(horizontal = 8.dp),
                     pageSpacing = 16.dp
                 ) { page ->
-                    // Adds a cool shrink/grow effect when scrolling
                     val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
                     val scale = lerp(0.92f, 1f, 1f - pageOffset.absoluteValue.coerceIn(0f, 1f))
 
@@ -184,7 +181,6 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                // Pager Indicators
                 Row(
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
@@ -209,7 +205,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- 4. Categories (Staggered Animation Index 3) ---
+        // --- 4. Categories  ---
         AnimatedVisibility(
             visibleState = visibleState,
             enter = slideInVertically(animationSpec = tween(500, delayMillis = 300)) { 50 } + fadeIn(animationSpec = tween(500, delayMillis = 300))
@@ -238,7 +234,7 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.height(240.dp),
-                    userScrollEnabled = false // Let parent scroll handle it
+                    userScrollEnabled = false
                 ) {
                     items(categories) { category ->
                         CategoryItem(category = category) { categoryId ->
@@ -251,7 +247,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- 5. Top Rated (Staggered Animation Index 4) ---
+        // --- 5. Top Rated  ---
         AnimatedVisibility(
             visibleState = visibleState,
             enter = slideInVertically(animationSpec = tween(500, delayMillis = 400)) { 50 } + fadeIn(animationSpec = tween(500, delayMillis = 400))
@@ -282,7 +278,7 @@ fun HomeScreen(
 
 @Composable
 fun AdBannerItem(ad: AdBannerData, index: Int) {
-    // Alternate colors based on index for variety
+
     val containerColor = when(index % 3) {
         0 -> MaterialTheme.colorScheme.primaryContainer
         1 -> MaterialTheme.colorScheme.secondaryContainer
@@ -327,7 +323,7 @@ fun AdBannerItem(ad: AdBannerData, index: Int) {
                     onClick = {},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = contentColor,
-                        contentColor = containerColor // Invert colors for button
+                        contentColor = containerColor
                     ),
                     shape = RoundedCornerShape(50),
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 0.dp),
