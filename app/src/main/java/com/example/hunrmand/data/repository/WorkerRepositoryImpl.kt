@@ -18,6 +18,7 @@ class WorkerRepositoryImpl : WorkerRepository {
         Category("paint", "Painter", Icons.Default.Brush),
         Category("clean", "Cleaner", Icons.Default.CleaningServices),
         Category("garden", "Gardener", Icons.Default.Grass)
+
     )
 
     // Master list of all workers (Acting as your "Database" for now)
