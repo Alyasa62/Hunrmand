@@ -70,5 +70,12 @@ dependencies {
     implementation("androidx.compose.material:material:1.9.4")
 
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
+
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.location)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.accompanist.permissions)
+
 
 }

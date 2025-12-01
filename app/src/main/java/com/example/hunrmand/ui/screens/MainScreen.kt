@@ -17,6 +17,7 @@ import com.example.hunrmand.navigation.bottomNavItems
 import com.example.hunrmand.ui.components.AppBottomBar
 import com.example.hunrmand.ui.screens.booking.BookingScreen
 import com.example.hunrmand.ui.screens.home.HomeScreen
+import com.example.hunrmand.ui.screens.maps.MapScreen
 import com.example.hunrmand.ui.screens.notification.NotificationScreen
 import com.example.hunrmand.ui.screens.workerList.WorkerListScreen
 import com.example.hunrmand.ui.screens.workerDetail.WorkerDetailScreen
@@ -78,6 +79,9 @@ fun MainScreen() {
             ) { backStackEntry ->
                 val workerId = backStackEntry.arguments?.getString("workerId") ?: ""
                 WorkerDetailScreen(navController = navController, workerId = workerId)
+            }
+            composable(Routes.MAP_SELECTION) {
+                MapScreen(navController = navController)
             }
         }
     }

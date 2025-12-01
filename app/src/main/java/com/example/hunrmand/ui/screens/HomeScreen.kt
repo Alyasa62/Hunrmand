@@ -25,13 +25,15 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
@@ -46,7 +48,6 @@ data class AdBannerData(
     val title: String,
     val discount: String,
     val buttonText: String
-    // We will use dynamic theme colors for backgrounds now
 )
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -56,12 +57,32 @@ fun HomeScreen(
     userName: String? = null,
     userCity: String? = null
 ) {
-    val repository = WorkerRepositoryImpl()
+    // 1. State for the city displayed in the UI
+    var currentCity by remember { mutableStateOf("Select City") }
+
+    // 2. Safely retrieve the result from the previous screen (MapScreen)
+    // We cannot use 'by' here because savedStateHandle can be null
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val mapResultState = savedStateHandle?.getLiveData<String>("selected_city")?.observeAsState()
+    val mapResult = mapResultState?.value
+
+    // 3. Update currentCity when mapResult changes
+    LaunchedEffect(mapResult) {
+        mapResult?.let { city ->
+            currentCity = city
+            // clear the result so it doesn't re-trigger unnecessarily if we come back later
+            savedStateHandle?.remove<String>("selected_city")
+        }
+    }
+
+    // In a real app, inject this via ViewModel
+    val repository = remember { WorkerRepositoryImpl() }
     val categories = repository.getCategories()
     val topWorkers = repository.getTopRatedWorkers()
 
     val nameToDisplay = userName ?: "User"
-    val cityToDisplay = userCity ?: "City, ABC"
+    // If user hasn't selected a city manually, fall back to passed city or default
+    val cityToDisplay = if (currentCity != "Select City") currentCity else (userCity ?: "City, ABC")
 
     val adsList = listOf(
         AdBannerData("Book AC Repair", "70% Off", "Book Now"),
@@ -99,6 +120,8 @@ fun HomeScreen(
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(modifier = Modifier.height(4.dp))
+
+                    // --- UPDATED CITY SELECTION UI ---
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = Icons.Default.LocationOn,
@@ -107,11 +130,26 @@ fun HomeScreen(
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = cityToDisplay,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        Row(
+                            modifier = Modifier
+                                .clickable {
+                                    // Navigate to the Map Selection screen
+                                    navController.navigate(Routes.MAP_SELECTION)
+                                },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = currentCity,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Icon(
+                                imageVector = Icons.Default.ArrowDropDown,
+                                contentDescription = "Select City",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
                 }
             }
@@ -130,7 +168,7 @@ fun HomeScreen(
                     .height(56.dp)
                     .clickable { navController.navigate(Routes.SEARCH) },
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f), // Subtle grey
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                 tonalElevation = 2.dp
             ) {
                 Row(
@@ -205,7 +243,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- 4. Categories  ---
+        // --- 4. Categories ---
         AnimatedVisibility(
             visibleState = visibleState,
             enter = slideInVertically(animationSpec = tween(500, delayMillis = 300)) { 50 } + fadeIn(animationSpec = tween(500, delayMillis = 300))
@@ -247,7 +285,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- 5. Top Rated  ---
+        // --- 5. Top Rated ---
         AnimatedVisibility(
             visibleState = visibleState,
             enter = slideInVertically(animationSpec = tween(500, delayMillis = 400)) { 50 } + fadeIn(animationSpec = tween(500, delayMillis = 400))
@@ -278,13 +316,12 @@ fun HomeScreen(
 
 @Composable
 fun AdBannerItem(ad: AdBannerData, index: Int) {
-
-    val containerColor = when(index % 3) {
+    val containerColor = when (index % 3) {
         0 -> MaterialTheme.colorScheme.primaryContainer
         1 -> MaterialTheme.colorScheme.secondaryContainer
         else -> MaterialTheme.colorScheme.tertiaryContainer
     }
-    val contentColor = when(index % 3) {
+    val contentColor = when (index % 3) {
         0 -> MaterialTheme.colorScheme.onPrimaryContainer
         1 -> MaterialTheme.colorScheme.onSecondaryContainer
         else -> MaterialTheme.colorScheme.onTertiaryContainer

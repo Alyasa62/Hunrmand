@@ -20,6 +20,9 @@ object Routes {
     const val NOTIFICATION = "notification"
     const val SEARCH = "search"
 
+    // Added Map Route for MapScreen
+    const val MAP_SELECTION = "map_selection"
+
     // Dynamic Routes
     const val WORKER_LIST = "worker_list/{categoryId}"
     const val WORKER_DETAIL = "worker_detail/{workerId}"
