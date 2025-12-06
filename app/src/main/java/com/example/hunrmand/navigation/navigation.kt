@@ -23,11 +23,11 @@ object Routes {
     // Auth
     const val LOGIN = "login"
     const val REGISTER = "register"
-    
+
     // Jobs
     const val JOB_FEED = "job_feed"
 
-    // Added Map Route for MapScreen
+    // Maps
     const val MAP_SELECTION = "map_selection"
 
     // Dynamic Routes

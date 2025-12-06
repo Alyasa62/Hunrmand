@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.example.hunrmand.data.source.local.SessionManager
+
 
 // Simple data class to represent a point on the map
 data class MapPin(
@@ -17,10 +19,10 @@ data class MapPin(
     val description: String
 )
 
-// Updated to accept LocationRepository in the constructor
-// This fixes the "Too many arguments" error in AppModule
+
 class MapViewModel(
-    private val locationRepository: LocationRepository
+    private val locationRepository: LocationRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _mapPins = MutableStateFlow<List<MapPin>>(emptyList())
@@ -51,5 +53,8 @@ class MapViewModel(
 
     fun onPinSelected(pin: MapPin) {
         println("Selected pin: ${pin.name}")
+        viewModelScope.launch {
+            sessionManager.saveCity(pin.name)
+        }
     }
 }

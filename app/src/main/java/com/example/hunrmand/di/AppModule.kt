@@ -43,12 +43,15 @@ val appModule = module {
 
     // 2. ViewModels (Created when the screen opens)
     viewModel { MapViewModel(
-        locationRepository = get()
+        locationRepository = get(),
+        sessionManager = get()
     ) }  // Injects LocationRepository automatically
-    viewModel { HomeViewModel(get()) } // Injects WorkerRepository automatically
+    viewModel { HomeViewModel(get(), get()) } // Injects WorkerRepository and SessionManager automatically
     viewModel { SearchViewModel(get()) } // Injects WorkerRepository automatically
     
     // Auth & Jobs
     viewModel { com.example.hunrmand.ui.screens.auth.AuthViewModel(get()) }
     viewModel { com.example.hunrmand.ui.screens.job.PostJobViewModel(get()) }
+    viewModel { com.example.hunrmand.ui.screens.profile.ProfileViewModel(get(), get()) }
+    viewModel { com.example.hunrmand.ui.screens.booking.BookingViewModel(get(), get()) }
 }

@@ -38,25 +38,14 @@ fun MainScreen(
     val navController = rememberNavController()
     val currentUser by authViewModel.currentUser.collectAsState()
     
-    // Redirect to Login if not authenticated
-    // Note: detailed "Splash" logic fits better, but here we redirect.
-    // If we want "Persistence", we need to wait for `currentUser` flow to emit first value (it might be null initially while loading).
-    // But AuthViewModel loads it in init.
-    // Assuming if null, we go to Login. But logic is tricky with async load.
-    // A better approach is usually a Splash Screen.
-    // For now, I'll set startDestination of NavHost dynamically or redirect.
-    // Simplest: If currentUser is null, startDestination = LOGIN.
-    // But NavHost startDest is static.
-    // We can use LaunchedEffect to navigate to Login if null.
-
-     LaunchedEffect(currentUser) {
-         if (currentUser == null) {
-             navController.navigate(Routes.LOGIN) {
-                 popUpTo(0) // Clear stack
-             }
-         }
-     }
-
+    // Determine start destination based on session presence
+    // If currentUser is initially null (loading), we might show a Splash. 
+    // But assuming AuthViewModel loads initially fast from DataStore.
+    // Ideally we'd have a specific "isLoading" state. 
+    // For this task, we'll route dynamically.
+    
+    val startDestination = if (currentUser != null) Routes.HOME else Routes.LOGIN
+    
     Scaffold(
         bottomBar = {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -84,14 +73,14 @@ fun MainScreen(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Routes.HOME,
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Routes.HOME) { HomeScreen(navController = navController) }
-            composable(Routes.BOOKING) { BookingScreen() }
+            composable(Routes.BOOKING) { BookingScreen(navController = navController) }
             composable(Routes.NEW_JOB) { NewJobScreen() }
             composable(Routes.NOTIFICATION) { NotificationScreen() }
-            composable(Routes.PROFILE) { ProfileScreen() }
+            composable(Routes.PROFILE) { ProfileScreen(navController = navController) }
             composable(Routes.SEARCH) { SearchScreen(navController = navController) }
 
             // Dynamic Route: List of Workers for a Category
@@ -119,7 +108,6 @@ fun MainScreen(
             composable(Routes.LOGIN) { 
                 LoginScreen(
                     onLoginSuccess = { 
-                        // Determine where to go based on role? Or just Home
                         navController.navigate(Routes.HOME) {
                             popUpTo(Routes.LOGIN) { inclusive = true }
                         }

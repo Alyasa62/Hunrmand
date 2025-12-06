@@ -9,8 +9,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+import com.example.hunrmand.data.source.local.SessionManager
+import kotlinx.coroutines.flow.collectLatest
+
 class HomeViewModel(
-    private val workerRepository: WorkerRepository
+    private val workerRepository: WorkerRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
 
@@ -33,6 +37,14 @@ class HomeViewModel(
             //  these will be API calls
             _categories.value = workerRepository.getCategories()
             _topWorkers.value = workerRepository.getTopRatedWorkers()
+        }
+        
+        viewModelScope.launch {
+            sessionManager.city.collectLatest { city ->
+                 if (!city.isNullOrEmpty()) {
+                     _currentCity.value = city
+                 }
+            }
         }
     }
 
