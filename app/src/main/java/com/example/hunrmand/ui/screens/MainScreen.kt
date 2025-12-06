@@ -61,7 +61,7 @@ fun MainScreen() {
             composable(Routes.NEW_JOB) { NewJobScreen() }
             composable(Routes.NOTIFICATION) { NotificationScreen() }
             composable(Routes.PROFILE) { ProfileScreen() }
-            composable(Routes.SEARCH) { SearchScreen() }
+            composable(Routes.SEARCH) { SearchScreen(navController = navController) }
 
             // Dynamic Route: List of Workers for a Category
             composable(

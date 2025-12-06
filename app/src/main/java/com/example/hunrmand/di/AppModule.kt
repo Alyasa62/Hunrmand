@@ -6,6 +6,7 @@ import com.example.hunrmand.domain.repository.LocationRepository
 import com.example.hunrmand.domain.repository.WorkerRepository
 import com.example.hunrmand.ui.maps.MapViewModel
 import com.example.hunrmand.ui.screens.home.HomeViewModel
+import com.example.hunrmand.ui.screens.search.SearchViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -20,4 +21,5 @@ val appModule = module {
         locationRepository = get()
     ) }  // Injects LocationRepository automatically
     viewModel { HomeViewModel(get()) } // Injects WorkerRepository automatically
+    viewModel { SearchViewModel(get()) } // Injects WorkerRepository automatically
 }
