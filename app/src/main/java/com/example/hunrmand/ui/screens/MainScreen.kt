@@ -21,10 +21,41 @@ import com.example.hunrmand.ui.screens.maps.MapScreen
 import com.example.hunrmand.ui.screens.notification.NotificationScreen
 import com.example.hunrmand.ui.screens.workerList.WorkerListScreen
 import com.example.hunrmand.ui.screens.workerDetail.WorkerDetailScreen
+import com.example.hunrmand.ui.screens.auth.LoginScreen
+import com.example.hunrmand.ui.screens.auth.RegistrationScreen
+import com.example.hunrmand.ui.screens.job.PostJobScreen
+import com.example.hunrmand.ui.screens.job.JobFeedScreen
+import com.example.hunrmand.ui.screens.auth.AuthViewModel
+import org.koin.androidx.compose.koinViewModel
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import com.example.hunrmand.domain.model.UserRole
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    authViewModel: AuthViewModel = koinViewModel()
+) {
     val navController = rememberNavController()
+    val currentUser by authViewModel.currentUser.collectAsState()
+    
+    // Redirect to Login if not authenticated
+    // Note: detailed "Splash" logic fits better, but here we redirect.
+    // If we want "Persistence", we need to wait for `currentUser` flow to emit first value (it might be null initially while loading).
+    // But AuthViewModel loads it in init.
+    // Assuming if null, we go to Login. But logic is tricky with async load.
+    // A better approach is usually a Splash Screen.
+    // For now, I'll set startDestination of NavHost dynamically or redirect.
+    // Simplest: If currentUser is null, startDestination = LOGIN.
+    // But NavHost startDest is static.
+    // We can use LaunchedEffect to navigate to Login if null.
+
+     LaunchedEffect(currentUser) {
+         if (currentUser == null) {
+             navController.navigate(Routes.LOGIN) {
+                 popUpTo(0) // Clear stack
+             }
+         }
+     }
 
     Scaffold(
         bottomBar = {
@@ -82,6 +113,45 @@ fun MainScreen() {
             }
             composable(Routes.MAP_SELECTION) {
                 MapScreen(navController = navController)
+            }
+            
+            // Auth Routes
+            composable(Routes.LOGIN) { 
+                LoginScreen(
+                    onLoginSuccess = { 
+                        // Determine where to go based on role? Or just Home
+                        navController.navigate(Routes.HOME) {
+                            popUpTo(Routes.LOGIN) { inclusive = true }
+                        }
+                    },
+                    onNavigateToRegister = {
+                        navController.navigate(Routes.REGISTER)
+                    }
+                ) 
+            }
+            composable(Routes.REGISTER) { 
+                RegistrationScreen(
+                    onRegistrationSuccess = {
+                        navController.navigate(Routes.LOGIN) {
+                            popUpTo(Routes.REGISTER) { inclusive = true }
+                        }
+                    },
+                    onNavigateToLogin = {
+                        navController.navigate(Routes.LOGIN)
+                    }
+                ) 
+            }
+            
+            // Job Routes
+            composable(Routes.NEW_JOB) { // Using existing NEW_JOB route
+                PostJobScreen(
+                    onJobPosted = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable(Routes.JOB_FEED) {
+                JobFeedScreen()
             }
         }
     }

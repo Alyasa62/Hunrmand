@@ -8,5 +8,6 @@ data class Worker(
     val city: String,
     val hourlyRate: String,
     val imageUrl: String? = null, // Placeholder for real image URL
-    val isTopPick: Boolean = false
+    val isTopPick: Boolean = false,
+    val profession: String = "" // Display name for category
 )

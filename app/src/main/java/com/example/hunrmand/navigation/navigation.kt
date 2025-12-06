@@ -19,6 +19,13 @@ object Routes {
     const val PROFILE = "profile"
     const val NOTIFICATION = "notification"
     const val SEARCH = "search"
+    
+    // Auth
+    const val LOGIN = "login"
+    const val REGISTER = "register"
+    
+    // Jobs
+    const val JOB_FEED = "job_feed"
 
     // Added Map Route for MapScreen
     const val MAP_SELECTION = "map_selection"

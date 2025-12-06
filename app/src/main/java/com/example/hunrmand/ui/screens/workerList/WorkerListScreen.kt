@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.hunrmand.data.repository.WorkerRepositoryImpl
 import com.example.hunrmand.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,7 +23,7 @@ fun WorkerListScreen(
     navController: NavController,
     categoryId: String
 ) {
-    val repository = WorkerRepositoryImpl()
+    val repository: com.example.hunrmand.domain.repository.WorkerRepository = org.koin.compose.koinInject()
     val workers = repository.getWorkersByCategory(categoryId)
 
     Scaffold(

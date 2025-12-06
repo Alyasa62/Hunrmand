@@ -9,4 +9,6 @@ interface WorkerRepository {
     fun getWorkerById(workerId: String): Worker?
 
     fun getTopRatedWorkers(): List<Worker>
+    
+    suspend fun deleteWorker(workerId: String)
 }
