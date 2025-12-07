@@ -29,6 +29,7 @@ object Routes {
 
     // Maps
     const val MAP_SELECTION = "map_selection"
+    const val LOCATION_PICKER = "location_picker"
 
     // Dynamic Routes
     const val WORKER_LIST = "worker_list/{categoryId}"

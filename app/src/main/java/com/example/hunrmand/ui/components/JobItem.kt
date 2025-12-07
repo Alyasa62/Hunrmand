@@ -20,7 +20,7 @@ fun JobItem(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(job.title, style = MaterialTheme.typography.titleLarge)
-            Text("Budget: $${job.budget}", style = MaterialTheme.typography.bodyMedium)
+            Text("Budget: PKR ${job.budget}", style = MaterialTheme.typography.bodyMedium)
             // Show location if available, assuming Job has location
             if (job.location.isNotBlank()) {
                 Text("Location: ${job.location}", style = MaterialTheme.typography.bodyMedium)

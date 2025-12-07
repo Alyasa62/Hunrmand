@@ -76,7 +76,14 @@ fun MainScreen(
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Routes.HOME) { HomeScreen(navController = navController) }
+            composable(Routes.HOME) { 
+                // Check Role and Show Appropriate Screen
+                if (currentUser?.role == UserRole.WORKER) {
+                    com.example.hunrmand.ui.screens.worker.WorkerHomeScreen(navController = navController)
+                } else {
+                    HomeScreen(navController = navController) 
+                }
+            }
             composable(Routes.BOOKING) { BookingScreen(navController = navController) }
             composable(Routes.NEW_JOB) { NewJobScreen() }
             composable(Routes.NOTIFICATION) { NotificationScreen() }
@@ -102,6 +109,9 @@ fun MainScreen(
             }
             composable(Routes.MAP_SELECTION) {
                 MapScreen(navController = navController)
+            }
+            composable(Routes.LOCATION_PICKER) {
+                com.example.hunrmand.ui.screens.location.LocationPickerScreen(navController = navController)
             }
             
             // Auth Routes
@@ -131,15 +141,34 @@ fun MainScreen(
             }
             
             // Job Routes
-            composable(Routes.NEW_JOB) { // Using existing NEW_JOB route
+            composable(Routes.NEW_JOB) { backStackEntry -> 
+                // Retrieve result from LocationPicker
+                val pickedLat = backStackEntry.savedStateHandle.get<Double>("picked_location_lat")
+                val pickedLng = backStackEntry.savedStateHandle.get<Double>("picked_location_lng")
+                val pickedAddress = backStackEntry.savedStateHandle.get<String>("picked_location_address")
+                
                 PostJobScreen(
                     onJobPosted = {
                         navController.popBackStack()
-                    }
+                    },
+                    onPickLocation = {
+                         navController.navigate(Routes.LOCATION_PICKER)
+                    },
+                    pickedLat = pickedLat,
+                    pickedLng = pickedLng,
+                    pickedAddress = pickedAddress
                 )
             }
             composable(Routes.JOB_FEED) {
                 JobFeedScreen()
+            }
+            
+            composable(
+                route = "job_detail/{jobId}",
+                arguments = listOf(androidx.navigation.navArgument("jobId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val jobId = backStackEntry.arguments?.getString("jobId") ?: ""
+                com.example.hunrmand.ui.screens.job.JobDetailScreen(navController = navController, jobId = jobId)
             }
         }
     }

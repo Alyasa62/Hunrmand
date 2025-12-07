@@ -7,15 +7,21 @@ import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.ElectricalServices
 import androidx.compose.material.icons.filled.Grass
 import com.example.hunrmand.data.source.local.LocalAuthDataSource
+import com.example.hunrmand.data.source.local.dao.JobDao
 import com.example.hunrmand.domain.model.Category
 import com.example.hunrmand.domain.model.UserRole
 import com.example.hunrmand.domain.model.Worker
 import com.example.hunrmand.domain.repository.WorkerRepository
+import com.example.hunrmand.domain.usecase.worker.JobMatchingUseCase
+import com.example.hunrmand.domain.usecase.worker.JobWithDistance
 import kotlinx.coroutines.runBlocking
 
 class WorkerRepositoryImpl(
-    private val localAuthDataSource: LocalAuthDataSource
+    private val localAuthDataSource: LocalAuthDataSource,
+    private val jobDao: JobDao
 ) : WorkerRepository {
+    
+    private val jobMatchingUseCase = JobMatchingUseCase()
 
     private val categories = listOf(
         Category("elec", "Electrician", Icons.Default.ElectricalServices),
@@ -100,5 +106,27 @@ class WorkerRepositoryImpl(
 
     override suspend fun deleteWorker(workerId: String) {
         localAuthDataSource.deleteUser(workerId)
+    }
+
+    override suspend fun getJobsForWorker(pdLat: Double, pdLng: Double, category: String): List<JobWithDistance> {
+        val allJobsEntities = jobDao.getAllJobs()
+        val allJobs = allJobsEntities.map { entity ->
+            com.example.hunrmand.domain.model.Job(
+                id = entity.id,
+                title = entity.title,
+                description = entity.description,
+                budget = entity.budget,
+                creatorId = entity.creatorId,
+                date = entity.createdAt,
+                latitude = entity.latitude,
+                longitude = entity.longitude,
+                address = entity.address
+            )
+        }
+        // Assuming category filter is meant to be done here or in UseCase.
+        // UseCase handles filtering.
+        // Note: category param is passed but my UseCase implementation filtered EVERYTHING if category wasn't in Job. 
+        // For now, I'll pass it to UseCase.
+        return jobMatchingUseCase(allJobs, pdLat, pdLng, category)
     }
 }

@@ -20,7 +20,10 @@ class JobRepositoryImpl(
                 budget = job.budget,
                 creatorId = job.creatorId,
                 createdAt = job.date,
-                userId = job.creatorId // Assuming userId in JobEntity matches creatorId/User logic
+                userId = job.creatorId,
+                latitude = job.latitude,
+                longitude = job.longitude,
+                address = job.address
             )
             jobDao.insertJob(jobEntity)
             Result.success(Unit)
@@ -46,22 +49,29 @@ class JobRepositoryImpl(
                 budget = entity.budget,
                 creatorId = entity.creatorId,
                 date = entity.createdAt,
-                location = "Lahore" // Placeholder
+                latitude = entity.latitude,
+                longitude = entity.longitude,
+                address = entity.address
             )
         }
     }
 
-    override suspend fun getJobsByUserId(userId: String): List<Job> {
-        return jobDao.getJobsByUserId(userId).map {
-            Job(
-                id = it.id,
-                title = it.title,
-                description = it.description,
-                budget = it.budget,
-                location = "Lahore", // Placeholder
-                date = it.createdAt,
-                creatorId = it.creatorId // Ensure mapping
-            )
+    override fun getJobsByUserId(userId: String): Flow<List<Job>> {
+        return jobDao.getJobsByUserId(userId).map { list ->
+            list.map { entity ->
+                Job(
+                    id = entity.id,
+                    title = entity.title,
+                    description = entity.description,
+                    budget = entity.budget,
+                    location = entity.address ?: "Lahore",
+                    date = entity.createdAt,
+                    creatorId = entity.creatorId,
+                    latitude = entity.latitude,
+                    longitude = entity.longitude,
+                    address = entity.address
+                )
+            }
         }
     }
 }

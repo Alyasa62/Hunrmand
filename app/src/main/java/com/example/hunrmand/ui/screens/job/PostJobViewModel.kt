@@ -10,12 +10,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
 
+import com.example.hunrmand.domain.usecase.PostJobUseCase
+
 class PostJobViewModel(
-    private val jobRepository: JobRepository
+    private val jobRepository: JobRepository,
+    private val postJobUseCase: PostJobUseCase
 ) : ViewModel() {
 
     private val _postJobState = MutableStateFlow<Result<Unit>?>(null)
     val postJobState: StateFlow<Result<Unit>?> = _postJobState.asStateFlow()
+    
+    // Form State
+    var title = MutableStateFlow("")
+    var description = MutableStateFlow("")
+    var budget = MutableStateFlow("")
     
     private val _allJobs = MutableStateFlow<List<Job>>(emptyList())
     val allJobs: StateFlow<List<Job>> = _allJobs.asStateFlow()
@@ -30,20 +38,26 @@ class PostJobViewModel(
         }
     }
 
-    fun postJob(title: String, description: String, budget: Double, creatorId: String) {
+    fun postJob(creatorId: String, latitude: Double?, longitude: Double?, address: String?) {
         viewModelScope.launch {
             val job = Job(
                 id = UUID.randomUUID().toString(),
-                title = title,
-                description = description,
-                budget = budget,
-                creatorId = creatorId
+                title = title.value,
+                description = description.value,
+                budget = budget.value.toDoubleOrNull() ?: 0.0,
+                creatorId = creatorId,
+                latitude = latitude,
+                longitude = longitude,
+                address = address
             )
-            _postJobState.value = jobRepository.createJob(job)
+            _postJobState.value = postJobUseCase(job)
         }
     }
     
     fun resetPostJobState() {
         _postJobState.value = null
+        title.value = ""
+        description.value = ""
+        budget.value = ""
     }
 }

@@ -1,7 +1,9 @@
 package com.example.hunrmand.ui.screens.job
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -13,12 +15,16 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun PostJobScreen(
     onJobPosted: () -> Unit,
+    onPickLocation: () -> Unit,
+    pickedAddress: String?,
+    pickedLat: Double?,
+    pickedLng: Double?,
     viewModel: PostJobViewModel = koinViewModel(),
     authViewModel: AuthViewModel = koinViewModel() // To get creator ID
 ) {
-    var title by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var budget by remember { mutableStateOf("") }
+    val title by viewModel.title.collectAsState()
+    val description by viewModel.description.collectAsState()
+    val budget by viewModel.budget.collectAsState()
     
     val postState by viewModel.postJobState.collectAsState()
     val currentUser by authViewModel.currentUser.collectAsState()
@@ -34,6 +40,7 @@ fun PostJobScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Text("Post a New Job", style = MaterialTheme.typography.headlineMedium)
         
@@ -41,7 +48,7 @@ fun PostJobScreen(
         
         OutlinedTextField(
             value = title,
-            onValueChange = { title = it },
+            onValueChange = { viewModel.title.value = it },
             label = { Text("Job Title") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -50,7 +57,7 @@ fun PostJobScreen(
         
         OutlinedTextField(
             value = description,
-            onValueChange = { description = it },
+            onValueChange = { viewModel.description.value = it },
             label = { Text("Description") },
             modifier = Modifier.fillMaxWidth(),
             minLines = 3
@@ -60,22 +67,39 @@ fun PostJobScreen(
         
         OutlinedTextField(
             value = budget,
-            onValueChange = { budget = it },
-            label = { Text("Budget") },
+            onValueChange = { viewModel.budget.value = it },
+            label = { Text("Budget (PKR)") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
         
         Spacer(modifier = Modifier.height(16.dp))
         
+        // Location Picker
+        if (pickedAddress != null) {
+            Text("Location: $pickedAddress", style = MaterialTheme.typography.bodyMedium)
+        } else {
+             Text("Location: Not Selected", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
+        }
+        
+        Button(
+            onClick = onPickLocation,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+        ) {
+            Text("Pick Location on Map")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        
         Button(
             onClick = { 
                 currentUser?.id?.let { creatorId ->
-                    viewModel.postJob(title, description, budget.toDoubleOrNull() ?: 0.0, creatorId) 
+                    viewModel.postJob(creatorId, pickedLat, pickedLng, pickedAddress) 
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            enabled = title.isNotBlank() && description.isNotBlank() && budget.isNotBlank() && currentUser != null
+            enabled = title.isNotBlank() && description.isNotBlank() && budget.isNotBlank() && currentUser != null && pickedLat != null
         ) {
             Text("Post Job")
         }

@@ -33,23 +33,19 @@ class BookingViewModel(
             val role = sessionManager.userRole.first()
 
             if (userId != null) {
-                // For now, regardless of role, we show jobs related to user.
-                // If Worker, we ideally show 'Applied' jobs, but for now we follow prompt:
-                // "For Workers: The 'Bookings' tab should show jobs they have accepted or applied for."
-                // Since we lack that table, we'll just show 'getJobsByUserId' (Jobs they posted? No, workers don't post).
-                // So for Workers, list might be empty or we show "No bookings found".
-                // Prompt: "Query: Update JobDao to include a query: getJobsByUserId(userId: String)..."
-                
                 if (role == "WORKER" || role == "Worker") {
-                     // Temporary: Show nothing or implement fake logic if needed?
-                     // Prompt says "Reuse JobItem... Empty State: No recent bookings found."
-                     // So returning empty list is fine for now.
+                     // Empty for now as per requirement analysis
                      _bookings.value = emptyList() 
+                     _isLoading.value = false
                 } else {
-                     _bookings.value = jobRepository.getJobsByUserId(userId)
+                     jobRepository.getJobsByUserId(userId).collect { jobs ->
+                         _bookings.value = jobs
+                         _isLoading.value = false
+                     }
                 }
+            } else {
+                _isLoading.value = false
             }
-            _isLoading.value = false
         }
     }
 }

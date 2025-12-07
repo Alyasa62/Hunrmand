@@ -11,4 +11,5 @@ interface WorkerRepository {
     fun getTopRatedWorkers(): List<Worker>
     
     suspend fun deleteWorker(workerId: String)
+    suspend fun getJobsForWorker(pdLat: Double, pdLng: Double, category: String): List<com.example.hunrmand.domain.usecase.worker.JobWithDistance>
 }

@@ -1,3 +1,4 @@
+
 package com.example.hunrmand.domain.model
 
 data class Job(
@@ -7,5 +8,9 @@ data class Job(
     val budget: Double,
     val creatorId: String,
     val date: Long = System.currentTimeMillis(),
-    val location: String = "Lahore" // Default for now
+    val location: String = "Lahore", // Default for now
+    val latitude: Double? = null,
+    val longitude: Double? = null,
+    val address: String? = null
 )
+

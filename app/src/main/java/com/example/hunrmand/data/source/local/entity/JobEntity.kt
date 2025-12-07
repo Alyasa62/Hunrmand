@@ -11,5 +11,8 @@ data class JobEntity(
     val budget: Double,
     val creatorId: String,
     val createdAt: Long,
-    val userId: String // Added to match repository logic
+    val userId: String, // Added to match repository logic
+    val latitude: Double? = null,
+    val longitude: Double? = null,
+    val address: String? = null
 )

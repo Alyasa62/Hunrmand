@@ -16,5 +16,5 @@ interface JobDao {
     suspend fun getAllJobs(): List<JobEntity>
 
     @Query("SELECT * FROM jobs WHERE userId = :userId ORDER BY createdAt DESC")
-    suspend fun getJobsByUserId(userId: String): List<JobEntity>
+    fun getJobsByUserId(userId: String): Flow<List<JobEntity>>
 }
