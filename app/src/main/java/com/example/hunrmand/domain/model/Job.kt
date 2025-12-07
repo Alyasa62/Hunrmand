@@ -11,6 +11,7 @@ data class Job(
     val location: String = "Lahore", // Default for now
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val address: String? = null
+    val address: String? = null,
+    val category: String = "General"
 )
 

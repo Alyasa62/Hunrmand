@@ -80,7 +80,7 @@ val appModule = module {
     viewModel { com.example.hunrmand.ui.screens.job.PostJobViewModel(get(), get()) } 
     viewModel { com.example.hunrmand.ui.screens.profile.ProfileViewModel(get(), get()) }
     viewModel { com.example.hunrmand.ui.screens.booking.BookingViewModel(get(), get()) }
-    viewModel { com.example.hunrmand.ui.screens.worker.WorkerHomeViewModel(get(), get(), get()) }
+    viewModel { com.example.hunrmand.ui.screens.worker.WorkerHomeViewModel(get(), get(), get(), get(), get()) }
     viewModel { com.example.hunrmand.ui.screens.notification.NotificationViewModel(get(), get()) }
     viewModel { com.example.hunrmand.ui.screens.location.LocationPickerViewModel(get(), get()) }
 }

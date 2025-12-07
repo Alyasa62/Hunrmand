@@ -11,7 +11,7 @@ import com.example.hunrmand.data.source.local.entity.JobEntity
 import com.example.hunrmand.data.source.local.entity.NotificationEntity
 import com.example.hunrmand.data.source.local.entity.UserEntity
 
-@Database(entities = [UserEntity::class, JobEntity::class, BidEntity::class, NotificationEntity::class], version = 2, exportSchema = false)
+@Database(entities = [UserEntity::class, JobEntity::class, BidEntity::class, NotificationEntity::class], version = 3, exportSchema = false)
 abstract class HunrmandDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun jobDao(): JobDao

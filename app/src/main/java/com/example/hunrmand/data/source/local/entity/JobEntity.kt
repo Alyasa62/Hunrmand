@@ -12,6 +12,7 @@ data class JobEntity(
     val creatorId: String,
     val createdAt: Long,
     val userId: String, // Added to match repository logic
+    val category: String = "General", // Default for migration
     val latitude: Double? = null,
     val longitude: Double? = null,
     val address: String? = null

@@ -29,6 +29,8 @@ fun WorkerHomeScreen(
     val jobs by viewModel.jobs.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -43,6 +45,20 @@ fun WorkerHomeScreen(
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
+            }
+        } else if (uiState == "EMPTY_SYSTEM") {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("No jobs available in the system.", style = MaterialTheme.typography.titleMedium)
+                    Text("Please try again later.", style = MaterialTheme.typography.bodySmall)
+                 }
+            }
+        } else if (uiState == "EMPTY_MATCHES") {
+             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("No matching jobs found near you.", style = MaterialTheme.typography.titleMedium)
+                    Text("Try updating your location or category.", style = MaterialTheme.typography.bodySmall)
+                 }
             }
         } else {
             LazyColumn(

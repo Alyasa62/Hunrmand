@@ -21,6 +21,7 @@ class JobRepositoryImpl(
                 creatorId = job.creatorId,
                 createdAt = job.date,
                 userId = job.creatorId,
+                category = job.category,
                 latitude = job.latitude,
                 longitude = job.longitude,
                 address = job.address
@@ -31,14 +32,6 @@ class JobRepositoryImpl(
             Result.failure(e)
         }
     }
-    
-    // Note: implementation_plan said "getJobs" returns Flow.
-    // But previous Tool 399 changed interface to suspend fun getJobs(): List<Job> ??
-    // No, split view: Tool 399 output shows:
-    // suspend fun getJobs(): List<Job>
-    // suspend fun getJobsByUserId(userId: String): List<Job>
-    
-    // So I must match that interface.
     
     override suspend fun getJobs(): List<Job> {
         return jobDao.getAllJobs().map { entity ->
@@ -51,7 +44,8 @@ class JobRepositoryImpl(
                 date = entity.createdAt,
                 latitude = entity.latitude,
                 longitude = entity.longitude,
-                address = entity.address
+                address = entity.address,
+                category = entity.category
             )
         }
     }
@@ -69,7 +63,8 @@ class JobRepositoryImpl(
                     creatorId = entity.creatorId,
                     latitude = entity.latitude,
                     longitude = entity.longitude,
-                    address = entity.address
+                    address = entity.address,
+                    category = entity.category
                 )
             }
         }
