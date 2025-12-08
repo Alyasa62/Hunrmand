@@ -35,6 +35,10 @@ object Routes {
     const val WORKER_LIST = "worker_list/{categoryId}"
     const val WORKER_DETAIL = "worker_detail/{workerId}"
 
+    const val EDIT_PROFILE = "edit_profile"
+    const val ADDRESS_LIST = "address_list"
+    const val SETTINGS = "settings"
+
     // Helper functions to build the route string
     fun getWorkerListRoute(categoryId: String) = "worker_list/$categoryId"
     fun getWorkerDetailRoute(workerId: String) = "worker_detail/$workerId"

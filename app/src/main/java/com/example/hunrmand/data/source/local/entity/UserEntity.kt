@@ -14,5 +14,6 @@ data class UserEntity(
     val rating: Double = 0.0,
     val hourlyRate: String? = null,
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val phoneNumber: String? = null
 )

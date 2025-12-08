@@ -25,7 +25,12 @@ import com.example.hunrmand.ui.screens.auth.LoginScreen
 import com.example.hunrmand.ui.screens.auth.RegistrationScreen
 import com.example.hunrmand.ui.screens.job.PostJobScreen
 import com.example.hunrmand.ui.screens.job.JobFeedScreen
+import com.example.hunrmand.ui.screens.SearchScreen
 import com.example.hunrmand.ui.screens.auth.AuthViewModel
+import com.example.hunrmand.ui.screens.profile.ProfileScreen
+import com.example.hunrmand.ui.screens.profile.EditProfileScreen
+import com.example.hunrmand.presentation.address.AddressListScreen
+import com.example.hunrmand.ui.screens.settings.SettingsScreen
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -85,9 +90,14 @@ fun MainScreen(
                 }
             }
             composable(Routes.BOOKING) { BookingScreen(navController = navController) }
-            composable(Routes.NEW_JOB) { NewJobScreen() }
+            // NEW_JOB defined below with arguments
             composable(Routes.NOTIFICATION) { NotificationScreen() }
             composable(Routes.PROFILE) { ProfileScreen(navController = navController) }
+            
+            composable(Routes.EDIT_PROFILE) { EditProfileScreen(navController = navController) }
+            composable(Routes.ADDRESS_LIST) { AddressListScreen(navController = navController) }
+            composable(Routes.SETTINGS) { SettingsScreen(navController = navController) }
+
             composable(Routes.SEARCH) { SearchScreen(navController = navController) }
 
             // Dynamic Route: List of Workers for a Category

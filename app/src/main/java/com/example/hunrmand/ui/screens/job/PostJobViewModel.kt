@@ -2,11 +2,14 @@ package com.example.hunrmand.ui.screens.job
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hunrmand.domain.repository.AddressRepository
+import com.example.hunrmand.data.source.local.SessionManager
 import com.example.hunrmand.domain.model.Job
 import com.example.hunrmand.domain.repository.JobRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -14,7 +17,9 @@ import com.example.hunrmand.domain.usecase.PostJobUseCase
 
 class PostJobViewModel(
     private val jobRepository: JobRepository,
-    private val postJobUseCase: PostJobUseCase
+    private val postJobUseCase: PostJobUseCase,
+    private val addressRepository: AddressRepository,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _postJobState = MutableStateFlow<Result<Unit>?>(null)
@@ -30,6 +35,22 @@ class PostJobViewModel(
 
     init {
         fetchAllJobs()
+        fetchDefaultAddress()
+    }
+    
+    // Location State
+    var selectedLocation = MutableStateFlow<String?>(null)
+
+    private fun fetchDefaultAddress() {
+        viewModelScope.launch {
+            val userId = sessionManager.userId.first()
+            if (userId != null) {
+                val defaultAddress = addressRepository.getDefaultAddress(userId)
+                if (defaultAddress != null) {
+                    selectedLocation.value = defaultAddress.fullAddress
+                }
+            }
+        }
     }
 
     private fun fetchAllJobs() {

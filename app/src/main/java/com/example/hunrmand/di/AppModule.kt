@@ -50,6 +50,7 @@ val appModule = module {
     single { get<HunrmandDatabase>().jobDao() }
     single { get<HunrmandDatabase>().bidDao() }
     single { get<HunrmandDatabase>().notificationDao() }
+    single { get<HunrmandDatabase>().addressDao() }
     
     single { SessionManager(androidContext()) }
     single<LocalAuthDataSource> { LocalAuthDataSourceImpl(get()) }
@@ -61,6 +62,7 @@ val appModule = module {
     single<JobRepository> { JobRepositoryImpl(get()) }
     single<com.example.hunrmand.domain.repository.BidRepository> { com.example.hunrmand.data.repository.BidRepositoryImpl(get()) }
     single<com.example.hunrmand.domain.repository.NotificationRepository> { com.example.hunrmand.data.repository.NotificationRepositoryImpl(get()) }
+    single { com.example.hunrmand.domain.repository.AddressRepository(get()) }
     
     // UseCases
     single { com.example.hunrmand.domain.usecase.PostJobUseCase(get(), get(), get()) }
@@ -77,10 +79,11 @@ val appModule = module {
     // Auth & Jobs
     viewModel { com.example.hunrmand.ui.screens.auth.AuthViewModel(get()) }
     // PostJobViewModel now requires PostJobUseCase, not JobRepository directly (or both, but UseCase covers it)
-    viewModel { com.example.hunrmand.ui.screens.job.PostJobViewModel(get(), get()) } 
-    viewModel { com.example.hunrmand.ui.screens.profile.ProfileViewModel(get(), get()) }
+    viewModel { com.example.hunrmand.ui.screens.job.PostJobViewModel(get(), get(), get(), get()) } 
+    viewModel { com.example.hunrmand.ui.screens.profile.ProfileViewModel(get(), get(), get()) }
     viewModel { com.example.hunrmand.ui.screens.booking.BookingViewModel(get(), get()) }
     viewModel { com.example.hunrmand.ui.screens.worker.WorkerHomeViewModel(get(), get(), get(), get(), get()) }
     viewModel { com.example.hunrmand.ui.screens.notification.NotificationViewModel(get(), get()) }
     viewModel { com.example.hunrmand.ui.screens.location.LocationPickerViewModel(get(), get()) }
+    viewModel { com.example.hunrmand.presentation.address.AddressViewModel(get(), get()) }
 }
