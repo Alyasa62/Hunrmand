@@ -8,6 +8,8 @@ interface WorkerRepository {
     fun getWorkersByCategory(categoryId: String): List<Worker>
     fun getWorkerById(workerId: String): Worker?
 
-    // New function for dynamic filtering
     fun getTopRatedWorkers(): List<Worker>
+    
+    suspend fun deleteWorker(workerId: String)
+    suspend fun getJobsForWorker(pdLat: Double, pdLng: Double, category: String): List<com.example.hunrmand.domain.usecase.worker.JobWithDistance>
 }

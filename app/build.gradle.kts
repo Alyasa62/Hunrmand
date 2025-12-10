@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -70,5 +71,17 @@ dependencies {
     implementation("androidx.compose.material:material:1.9.4")
 
     implementation("androidx.compose.material:material-icons-extended-android:1.7.8")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
 
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.location)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.accompanist.permissions)
+
+
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+    implementation(libs.androidx.datastore.preferences)
 }

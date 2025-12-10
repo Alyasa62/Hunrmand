@@ -19,10 +19,25 @@ object Routes {
     const val PROFILE = "profile"
     const val NOTIFICATION = "notification"
     const val SEARCH = "search"
+    
+    // Auth
+    const val LOGIN = "login"
+    const val REGISTER = "register"
+
+    // Jobs
+    const val JOB_FEED = "job_feed"
+
+    // Maps
+    const val MAP_SELECTION = "map_selection"
+    const val LOCATION_PICKER = "location_picker"
 
     // Dynamic Routes
     const val WORKER_LIST = "worker_list/{categoryId}"
     const val WORKER_DETAIL = "worker_detail/{workerId}"
+
+    const val EDIT_PROFILE = "edit_profile"
+    const val ADDRESS_LIST = "address_list"
+    const val SETTINGS = "settings"
 
     // Helper functions to build the route string
     fun getWorkerListRoute(categoryId: String) = "worker_list/$categoryId"
